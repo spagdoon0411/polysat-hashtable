@@ -4,7 +4,8 @@
 #include <string.h>  
 
 /* The type of integer used for the table size. 
-Should be unsigned. */
+Should be unsigned. Determines how large the 
+hash table can grow. */
 #define SIZEINT uint32_t 
 
 /* The prime number just below or equal to the 

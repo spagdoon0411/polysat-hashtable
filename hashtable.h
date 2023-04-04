@@ -1,17 +1,13 @@
-#include <stdint.h>
 #include <stdlib.h>
 #include <stddef.h>
-#include <string.h>  
+#include <string.h> 
+#include <stdint.h>
+#include <stdio.h>
 
 /* The type of integer used for the table size. 
 Should be signed. Determines how large the 
 hash table can grow. */
 #define SIZEINT int32_t 
-
-/* The largest prime number that can be held 
-by a SIZEINT. Used within nextprime() to check for
-integer overflow. */
-#define MAXPRIME (SIZEINT)2147483647 
 
 /* Load factor threshold for table expansion, 
 always less than 1. 0.75 is used here, as that
@@ -22,6 +18,11 @@ worst-case search scenario. */
 /* (Rough) factor by which to grow the table 
 when necessary. */
 #define GF 2
+
+/* The largest prime number that can be held 
+by a SIZEINT. Used within nextprime() to check for
+integer overflow. */
+#define MAXPRIME 21474836467
 
 typedef struct HashTable {
     SIZEINT entries; 

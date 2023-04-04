@@ -1,5 +1,4 @@
 #include "hashtable.h"
-#include <stdio.h>
 
 /* The type of integer used to represent the
 lengths of keys. Should allow for at least

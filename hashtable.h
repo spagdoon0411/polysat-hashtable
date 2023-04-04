@@ -22,7 +22,7 @@ when necessary. */
 /* The largest prime number that can be held 
 by a SIZEINT. Used within nextprime() to check for
 integer overflow. */
-#define MAXPRIME 21474836467
+#define MAXPRIME (SIZEINT)2147483647
 
 typedef struct HashTable {
     SIZEINT entries; 

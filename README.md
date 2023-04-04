@@ -17,12 +17,6 @@
 - For growth factors, [1.5 seems to be more optimal than 2](https://stackoverflow.com/questions/2369467/why-are-hash-table-expansions-usually-done-by-doubling-the-size). It would be a good idea to understand and be able to present on why this is the case. 
 
 ## Questions/To Consider
-- Should I implement a search? Could be a stretch goal before the CLI stuff
-- Ordered or unordered?
-- Can I use function pointers to support modularity?
-- Should I aim to emulate object-oriented behavior?
-- How should my "example" HashCode equivalent make its calculations? Using the pointer itself?
-- Do I want to be able to store `null`? 
 - A comment on this thread mentions a method for [lazy rehashing](https://stackoverflow.com/questions/9858751/how-to-implement-a-dynamic-size-hash-table)
 - [About fragmentation](https://www.design-reuse.com/articles/25090/dynamic-memory-allocation-fragmentation-c.html)
 - [Virtual memory](https://stackoverflow.com/questions/31773466/when-a-large-block-of-memory-is-requested-on-the-heap-if-contiguous-space-is-no): using disk storage as emergency RAM

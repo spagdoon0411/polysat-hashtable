@@ -48,10 +48,13 @@ slide 24 from the source below:
 
 courses.cs.washington.edu/courses/cse326/00wi/handouts/lecture16/sld024.htm */
 SIZEINT hash2(char* key, SIZEINT tablesize) {
-    KEYLENINT keylen = strlen(key);
+    KEYLENINT keylen;
     KEYLENINT i;
     uint8_t ascii_term = 0;
-    SIZEINT prime = prevprime(tablesize);
+    SIZEINT prime;
+
+    keylen = strlen(key);
+    prime = prevprime(tablesize);
 
     for(i = 0; i < keylen; i++) {
         if(i % 2)
@@ -68,7 +71,7 @@ SIZEINT hash2(char* key, SIZEINT tablesize) {
 with a size of the next prime number above the 
 requested size. Returns NULL if the requested size 
 is too large OR if the inputted size is 0. */
-HashTable* htcreate(SIZEINT reqsize) {
+HashTable *htcreate(SIZEINT reqsize) {
     HashTable *ht = NULL;
     SIZEINT truesize;
 
@@ -261,11 +264,13 @@ uint8_t htgrow(HashTable *ht) {
 testing, etc. that prints a string representation
 of the hash table to the terminal. */
 void htprint(HashTable *ht) {
+    int i;
+
     printf("Entries: %d\n", ht->entries);
     printf("Size: %d\n", ht->size);
     printf("Load factor: %f\n", (float)(ht->entries) / ht->size);
 
-    for(int i = 0; i < ht->size; i++) {
+    for(i = 0; i < ht->size; i++) {
         if(ht->keys[i] != NULL)
             printf("%s: %d\n", ht->keys[i], *((int*)ht->values[i]));
         else 

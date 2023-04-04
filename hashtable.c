@@ -25,8 +25,9 @@ the key[0] term) */
 that prevents any hashing to 0. This is when the size should be 
 updated to avoid using 0. Alternatively, use -1 for error codes
 instead of 0 and allow hashing to 0. If -1 is used, make sure to 
-change to using signed integers. */
-
+change to using signed integers. If the exclusion-of-0 rule is 
+preserved, make sure this logic is internal to the general hash
+function and that any hashes to 0 simply use an additional i.*/
 
 /* Returns a hash table index based on the
 key given. Used for initial hashing. Uses

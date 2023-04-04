@@ -134,13 +134,21 @@ void testhtinsertandcontains05() {
     printf(" successful.");
 }
 
+/* Tests how the htinsert() function handles hash
+collisions. */
+void testinsertcollisions() {
 
+}
+
+/* Tests removal of values from the hash table */
 void testhtremove() {
     printf(" about to run...");
     printf(" successful.");
 }
 
-/*
+void testhashrange() {
+
+}
 
 void testhtdestroy() {
     printf(" about to run...");
@@ -152,24 +160,22 @@ void testhtgrow() {
     printf(" successful.");
 }
 
-tests cases in which integers may overflow 
+/* Tests cases in which integers may overflow 
 related to finding a prime number that is too 
 large for the integers used for the sizes
-of the table
+of the table */
 void nextprimeoverflow() {
 
 }
 
-tests cases in which integers may overflow 
+/* tests cases in which integers may overflow 
 and how the program handles those cases when 
 the situations that caused them relate to
-the hash table growing too large
+the hash table growing too large */
 void htgrowoverflow() {
 
 }
 
-
-*/
 
 int main() {
     testhtcreate01();

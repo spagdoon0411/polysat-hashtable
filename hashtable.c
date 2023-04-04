@@ -21,13 +21,7 @@ characters. Maybe alternate adding and subtracting each ASCII
 value from a sum and finding the magnitude? (to replace
 the key[0] term) */
 
-/* TODO: make a neat hash function dependent on hash1 and hash2
-that prevents any hashing to 0. This is when the size should be 
-updated to avoid using 0. Alternatively, use -1 for error codes
-instead of 0 and allow hashing to 0. If -1 is used, make sure to 
-change to using signed integers. If the exclusion-of-0 rule is 
-preserved, make sure this logic is internal to the general hash
-function and that any hashes to 0 simply use an additional i.*/
+/* TODO: replace all usages of hash2 with rehash */
 
 /* Returns a hash table index based on the
 key given. Used for initial hashing. Uses
@@ -64,16 +58,23 @@ SIZEINT hash1(char* key, SIZEINT tablesize) {
     return hash;
 }
 
-/* Returns a hash table index based on the
-key given. Used for calculating probing step
-sizes. Followed a (common) second hash function 
-recommendation from these University of Washington 
-slides: 
+/* Second hash function.
 
 courses.cs.washington.edu/courses/cse326/00wi/handouts/lecture16/sld024.htm */
 SIZEINT hash2(char* key) {
     return (40009 - (strlen(key) * key[0]) % 40009);
 }
+
+/* Calculates probing step sizes for double hashing. */
+SIZEINT rehash(SIZEINT oldhash, char* key, SIZEINT tablesize) {
+    SIZEINT newhash;
+    
+    newhash = (oldhash + hash2(key));
+
+    if(newhash == 0)
+        return newhash + 1;
+}
+
 
 /* Makes an empty dynamically-allocated hash table 
 with a size of the next prime number above the 
@@ -129,7 +130,7 @@ uint8_t htinsert(HashTable *ht, char* key, void* value) {
     than running hash2 once unnecessarily. */
     if(ht->keys[index] != NULL) {
         rehashstep = hash2(key);
-        
+
         while(ht->keys[index] != NULL) {
             /* A free space in the table is guaranteed;
             the load factor was constrained to be less than CRITLF,
@@ -161,8 +162,9 @@ SIZEINT htcontains(HashTable *ht, char* key) {
     if(ht->keys[attempt] != NULL && !strcmp(ht->keys[attempt], key))
         return attempt;
 
-    rehashstep = hash2(key);
     initialattempt = attempt;
+    rehashstep = hash2(key);
+    
     while(1) {
         attempt = (attempt + rehashstep) % ht->size;
 

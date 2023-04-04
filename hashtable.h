@@ -26,20 +26,21 @@ when necessary. */
 typedef struct HashTable {
     SIZEINT entries; 
     SIZEINT size;
-    char** keys; 
-    void** values;
+    char **keys; 
+    void **values;
 } HashTable;
 
-SIZEINT hash1(char* key, SIZEINT tablesize);
-SIZEINT hash2(char* key, SIZEINT tablesize);
-HashTable* htcreate(SIZEINT reqsize);
-uint8_t htinsert(HashTable *ht, char* key, void* value);
-SIZEINT htcontains(HashTable *ht, char* key);
-void* htremove(HashTable *ht, char* key);
-void htdestroy(HashTable* ht);
-uint8_t htgrow(HashTable *ht);
-void htprint(HashTable *ht);
-SIZEINT nextprime(SIZEINT n);
-SIZEINT prevprime(SIZEINT n);
-uint8_t isprime(SIZEINT n);
+SIZEINT hash1(char*, SIZEINT);
+SIZEINT hash2(char*, SIZEINT);
+HashTable *htcreate(SIZEINT);
+uint8_t htinsert(HashTable*, char*, void*);
+SIZEINT htcontains(HashTable*, char*);
+void *htget(HashTable*, char*);
+void *htremove(HashTable*, char*);
+void htdestroy(HashTable*);
+uint8_t htgrow(HashTable*);
+void htprint(HashTable*);
+SIZEINT nextprime(SIZEINT);
+SIZEINT prevprime(SIZEINT);
+uint8_t isprime(SIZEINT);
 

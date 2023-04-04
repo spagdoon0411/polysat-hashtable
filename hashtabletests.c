@@ -23,8 +23,8 @@ void testhtcreate01() {
 }
 
 /* Tests whether empty hash tables are 
-created correctly when a composite number
-is entered. */
+created correctly in more general cases
+(i.e., not perfect primes). */
 void testhtcreate02() {
     int i;
 
@@ -37,6 +37,11 @@ void testhtcreate02() {
         assert(ht1->keys[i] == 0);
     }
     assert(ht1->values[0] == NULL);
+
+    HashTable* ht2 = htcreate(-2);
+    HashTable* ht3 = htcreate(0);
+    assert(ht2 == NULL);
+    assert(ht3 == NULL);
 
     htdestroy(ht1);
     printf("02 successful.\n");
@@ -294,6 +299,38 @@ void testhtremove06() {
     printf("06 successful.\n");
 }
 
+void testhtget07() {
+    printf("07 about to run...\n");
+
+    HashTable *ht = htcreate(8);
+
+    char* key1 = "eggs";
+    char* key2 = "milk";
+    char* key3 = "butter";
+    char* key4 = "tomato soup";
+    char* key5 = "bananas";
+    int data1 = 1;
+    int data2 = 2;
+    int data3 = 3;
+    int data4 = 4;
+    int data5 = 5;
+
+    htinsert(ht, key1, &data1);
+    htinsert(ht, key2, &data2);
+    htinsert(ht, key3, &data3);
+    htinsert(ht, key4, &data4);
+
+    assert(htget(ht, key1) == &data1);
+    assert(htget(ht, key2) == &data2);
+    assert(htget(ht, key3) == &data3);
+    assert(htget(ht, key4) == &data4);
+    assert(htget(ht, key5) == NULL);
+
+    htdestroy(ht);
+
+    printf("07 about to run...\n");
+}
+
 int main() {
     testhtcreate01();
     testhtcreate02();
@@ -301,5 +338,6 @@ int main() {
     testhtinsertandhtcontains04();
     testhtinsertandhtcontains05();
     testhtremove06();
+    testhtget07();
     return 0;
 }

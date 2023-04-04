@@ -77,11 +77,14 @@ HashTable *htcreate(SIZEINT reqsize) {
 
     truesize = nextprime(reqsize);
 
-    if(truesize < 0 || reqsize == 0)
+    if(truesize < 0 || reqsize <= 0)
         /* If nextprime returned 0 (meaning that
         the prime number requested is too large
         for a SIZEINT integer), return NULL to 
         indicate failure. */
+
+        /* Also return NULL if a table with
+        an invalid size was requested. */
         return NULL;
 
     ht = (HashTable*)malloc(sizeof(HashTable));
@@ -188,7 +191,7 @@ stored in the table with that key on success (to allow for
 quick deallocation by the user) and NULL otherwise. */
 void *htremove(HashTable *ht, char *key) {
     SIZEINT index;
-    void* ptr;
+    void *ptr;
 
     if((index = htcontains(ht, key)) < 0)
         return NULL;

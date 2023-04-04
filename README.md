@@ -14,8 +14,6 @@
 
 ## Questions/To Consider
 - A comment on this thread mentions a method for [lazy rehashing](https://stackoverflow.com/questions/9858751/how-to-implement-a-dynamic-size-hash-table)
-- [About fragmentation](https://www.design-reuse.com/articles/25090/dynamic-memory-allocation-fragmentation-c.html)
-- [Virtual memory](https://stackoverflow.com/questions/31773466/when-a-large-block-of-memory-is-requested-on-the-heap-if-contiguous-space-is-no): using disk storage as emergency RAM
 
 ## Task Description
 This question would be good for those who are confident in their systems

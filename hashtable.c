@@ -172,7 +172,7 @@ SIZEINT htcontains(HashTable *ht, char *key) {
 /* Gets the value associated with a particular 
 key from the hash table. Returns NULL if the
 key could not be found.*/
-void* htget(HashTable *ht, char *key) {
+void *htget(HashTable *ht, char *key) {
     SIZEINT index;
 
     /* If the hash table does not contain the inputted 
@@ -186,7 +186,7 @@ void* htget(HashTable *ht, char *key) {
 /* Removes the entry with the given key. Returns the pointer
 stored in the table with that key on success (to allow for
 quick deallocation by the user) and NULL otherwise. */
-void* htremove(HashTable *ht, char *key) {
+void *htremove(HashTable *ht, char *key) {
     SIZEINT index;
     void* ptr;
 

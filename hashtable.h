@@ -17,16 +17,11 @@ integer overflow. */
 always less than 1. 0.75 is used here, as that
 leads to an expected probe count of 4 in the 
 worst-case search scenario. */
-#define CRITLF 0.75 
+#define CRITLF 0.75
 
 /* (Rough) factor by which to grow the table 
 when necessary. */
-#define GF 1.5 
-
-/* The type of integer used to represent the
-lengths of keys. Should allow for at least
-MAXPRIME unique keys. */
-#define KEYLENINT uint8_t
+#define GF 2
 
 typedef struct HashTable {
     SIZEINT entries; 
@@ -36,7 +31,7 @@ typedef struct HashTable {
 } HashTable;
 
 SIZEINT hash1(char* key, SIZEINT tablesize);
-SIZEINT hash2(char* key);
+SIZEINT hash2(char* key, SIZEINT tablesize);
 HashTable* htcreate(SIZEINT reqsize);
 uint8_t htinsert(HashTable *ht, char* key, void* value);
 SIZEINT htcontains(HashTable *ht, char* key);
@@ -45,5 +40,6 @@ void htdestroy(HashTable* ht);
 uint8_t htgrow(HashTable *ht);
 void htprint(HashTable *ht);
 SIZEINT nextprime(SIZEINT n);
+SIZEINT prevprime(SIZEINT n);
 uint8_t isprime(SIZEINT n);
 

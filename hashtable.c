@@ -25,7 +25,6 @@ value from a sum and finding the magnitude? (to replace
 the key[0] term) */
 
 
-
 /* Returns a hash table index based on the
 key given. Used for initial hashing. Uses
 Bob Jenkins's one-at-a-time hash, found here: 
@@ -251,6 +250,9 @@ uint8_t htgrow(HashTable *ht) {
             htinsert(ht, oldkeys[i], oldvalues[i]);
         }
     }
+
+    free(oldkeys);
+    free(oldvalues);
 
     return 1;
 }

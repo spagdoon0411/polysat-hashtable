@@ -130,15 +130,17 @@ void testhtinsertandcontains04() {
 /* Tests htinsert() and htcontains() in cases
 where the hash table DOES need to grow. */
 void testhtinsertandcontains05() {
-
+    printf(" about to run...");
+    printf(" successful.");
 }
 
 
-/*
 void testhtremove() {
     printf(" about to run...");
     printf(" successful.");
 }
+
+/*
 
 void testhtdestroy() {
     printf(" about to run...");

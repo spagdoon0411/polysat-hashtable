@@ -22,7 +22,7 @@ key given. Used for initial hashing. Uses
 Bob Jenkins's one-at-a-time hash, found here: 
 
 en.wikipedia.org/wiki/Jenkins_hash_function */
-SIZEINT hash1(char* key, SIZEINT tablesize) {
+SIZEINT hash1(char *key, SIZEINT tablesize) {
     KEYLENINT keylen;
     KEYLENINT i = 0;
     OAATJENINT hash = 0;
@@ -47,7 +47,7 @@ SIZEINT hash1(char* key, SIZEINT tablesize) {
 slide 24 from the source below:
 
 courses.cs.washington.edu/courses/cse326/00wi/handouts/lecture16/sld024.htm */
-SIZEINT hash2(char* key, SIZEINT tablesize) {
+SIZEINT hash2(char *key, SIZEINT tablesize) {
     KEYLENINT keylen;
     KEYLENINT i;
     uint8_t ascii_term = 0;
@@ -96,7 +96,7 @@ HashTable *htcreate(SIZEINT reqsize) {
 
 /* Places a value into the hash table. Returns 1 on success 
 and 0 otherwise. */
-uint8_t htinsert(HashTable *ht, char* key, void* value) {
+uint8_t htinsert(HashTable *ht, char *key, void *value) {
     SIZEINT index, rehashstep;
 
     index = htcontains(ht, key);
@@ -140,7 +140,7 @@ uint8_t htinsert(HashTable *ht, char* key, void* value) {
 /* Searches the table for an entry with the given 
 key. Returns the index of the key if found or 
 returns -1. */
-SIZEINT htcontains(HashTable *ht, char* key) {
+SIZEINT htcontains(HashTable *ht, char *key) {
     SIZEINT attempt, rehashstep, initialattempt;
     
     attempt = hash1(key, ht->size);
@@ -172,7 +172,7 @@ SIZEINT htcontains(HashTable *ht, char* key) {
 /* Gets the value associated with a particular 
 key from the hash table. Returns NULL if the
 key could not be found.*/
-void* htget(HashTable *ht, char* key) {
+void* htget(HashTable *ht, char *key) {
     SIZEINT index;
 
     /* If the hash table does not contain the inputted 
@@ -186,7 +186,7 @@ void* htget(HashTable *ht, char* key) {
 /* Removes the entry with the given key. Returns the pointer
 stored in the table with that key on success (to allow for
 quick deallocation by the user) and NULL otherwise. */
-void* htremove(HashTable *ht, char* key) {
+void* htremove(HashTable *ht, char *key) {
     SIZEINT index;
     void* ptr;
 
@@ -204,7 +204,7 @@ void* htremove(HashTable *ht, char* key) {
 
 /* Deallocates all dynamically-allocated memory associated with the 
 hash table that is not the user's responsiblity. */
-void htdestroy(HashTable* ht) {
+void htdestroy(HashTable *ht) {
     free(ht->keys);
     free(ht->values);
     free(ht);

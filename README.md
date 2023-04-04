@@ -6,14 +6,10 @@
         - Rehashing
         - Hash code generation (arguments would *include* the key and table size)
         - Insertion 
-- Uses an array
-    - Built-in offset calculation
-    - Natural to dynamically allocate
 - Wrapper struct: 
     - Number of entries
     - Hash table size
     - Load factor (derived from the above two, likely found with a function for consistency/uniformity)
-- `realloc()` should be used when expanding the hash table; will handle growth in memory
 - For growth factors, [1.5 seems to be more optimal than 2](https://stackoverflow.com/questions/2369467/why-are-hash-table-expansions-usually-done-by-doubling-the-size). It would be a good idea to understand and be able to present on why this is the case. 
 
 ## Questions/To Consider

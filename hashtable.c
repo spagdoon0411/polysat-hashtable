@@ -24,7 +24,8 @@ the key[0] term) */
 /* TODO: make a neat hash function dependent on hash1 and hash2
 that prevents any hashing to 0. This is when the size should be 
 updated to avoid using 0. Alternatively, use -1 for error codes
-instead of 0 and allow hashing to 0. */
+instead of 0 and allow hashing to 0. If -1 is used, make sure to 
+change to using signed integers. */
 
 
 /* Returns a hash table index based on the
@@ -69,7 +70,7 @@ recommendation from these University of Washington
 slides: 
 
 courses.cs.washington.edu/courses/cse326/00wi/handouts/lecture16/sld024.htm */
-SIZEINT hash2(char* key, SIZEINT tablesize) {
+SIZEINT hash2(char* key) {
     return (40009 - (strlen(key) * key[0]) % 40009);
 }
 
@@ -126,7 +127,7 @@ uint8_t htinsert(HashTable *ht, char* key, void* value) {
     checking if hash2 needs to be run is more efficient 
     than running hash2 once unnecessarily. */
     if(ht->keys[index] != NULL) {
-        rehashstep = hash2(key, ht->size);
+        rehashstep = hash2(key);
         
         while(ht->keys[index] != NULL) {
             /* A free space in the table is guaranteed;
@@ -159,7 +160,7 @@ SIZEINT htcontains(HashTable *ht, char* key) {
     if(ht->keys[attempt] != NULL && !strcmp(ht->keys[attempt], key))
         return attempt;
 
-    rehashstep = hash2(key, ht->size);
+    rehashstep = hash2(key);
     initialattempt = attempt;
     while(1) {
         attempt = (attempt + rehashstep) % ht->size;

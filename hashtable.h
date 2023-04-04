@@ -37,7 +37,7 @@ typedef struct HashTable {
 } HashTable;
 
 SIZEINT hash1(char* key, SIZEINT tablesize);
-SIZEINT hash2(char* key, SIZEINT tablesize);
+SIZEINT hash2(char* key);
 HashTable* htcreate(SIZEINT reqsize);
 uint8_t htinsert(HashTable *ht, char* key, void* value);
 SIZEINT htcontains(HashTable *ht, char* key);

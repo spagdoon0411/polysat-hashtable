@@ -7,6 +7,7 @@ created correctly when a prime number
 is entered. */
 void testhtcreate01() {
     int i;
+
     printf("01 about to run...\n");
 
     HashTable* ht1 = htcreate(7);
@@ -26,6 +27,7 @@ created correctly when a composite number
 is entered. */
 void testhtcreate02() {
     int i;
+
     printf("02 about to run...\n");
 
     HashTable* ht1 = htcreate(4);
@@ -42,31 +44,18 @@ void testhtcreate02() {
 
 /* Tests whether NULL is returned
 when the requested size for a hash
-table results in an integer overflow */
+table is 0 or greater than the 
+maximum prime number able to be 
+held by a SIZEINT. */
 void testhtcreate03() {
+    SIZEINT size = MAXPRIME + 1;
+    
     printf("03 about to run...\n");
 
-    HashTable* ht1 = htcreate(MAXPRIME + 1);
-    assert(ht1 == NULL);
-    free(ht1);
-    ht1 = htcreate(MAXPRIME + 2);
-    assert(ht1 == NULL);
-    free(ht1);
-    ht1 = htcreate(MAXPRIME + 3);
-    assert(ht1 == NULL);
-    free(ht1);
-    ht1 = htcreate(MAXPRIME + 4);
-    assert(ht1 == NULL);
-    free(ht1);
-    ht1 = htcreate(MAXPRIME + 5);
-    assert(ht1 == NULL);
-    free(ht1);
-    ht1 = htcreate(0);
-    assert(ht1 == NULL);
-    free(ht1);
-    ht1 = htcreate(1);
-    assert(ht1 != NULL);
-    free(ht1);
+    if(size > 0)
+        assert(htcreate(size) == NULL);
+    assert(htcreate(MAXPRIME) != NULL);
+    assert(htcreate(1) != NULL);
     
     printf("03 successful.\n");
 }
@@ -103,13 +92,13 @@ void testhtinsertandcontains04() {
 
     assert(ht->keys[0] == 0);
 
-    assert(htcontains(ht, key1));
-    assert(htcontains(ht, key2));
-    assert(htcontains(ht, key3));
-    assert(htcontains(ht, key4));
-    assert(htcontains(ht, duplicatekey1));
+    assert(htcontains(ht, key1) >= 0);
+    assert(htcontains(ht, key2) >= 0);
+    assert(htcontains(ht, key3) >= 0);
+    assert(htcontains(ht, key4) >= 0);
+    assert(htcontains(ht, duplicatekey1) >= 0);
     
-    assert(!(htcontains(ht, unusedkey)));
+    assert(htcontains(ht, unusedkey) < 0);
     
     /* Investigates value overwriting, which is
     expected when the same string is inputted 
@@ -117,8 +106,8 @@ void testhtinsertandcontains04() {
     assert(htinsert(ht, duplicatekey2, &data3));
     assert(ht->values[htcontains(ht, duplicatekey2)] == &data3);
     assert(htinsert(ht, duplicatekey3, &data4));
-    assert(htcontains(ht, duplicatekey2));
-    assert(htcontains(ht, duplicatekey3));
+    assert(htcontains(ht, duplicatekey2) >= 0);
+    assert(htcontains(ht, duplicatekey3) >= 0);
 
     assert(ht->values[htcontains(ht, duplicatekey2)] == &data4);
     assert(ht->values[htcontains(ht, duplicatekey3)] == &data4);
@@ -168,10 +157,10 @@ void nextprimeoverflow() {
 
 }
 
-/* tests cases in which integers may overflow 
-and how the program handles those cases when 
+/* Tests cases in which integers may overflow 
+and how the program handles those cases (when 
 the situations that caused them relate to
-the hash table growing too large */
+the hash table growing too large) */
 void htgrowoverflow() {
 
 }

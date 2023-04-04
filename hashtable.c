@@ -18,21 +18,21 @@ exceptions) */
 
 /* TODO: for hash2, see if there's a way to involve all
 characters. Maybe alternate adding and subtracting each ASCII
-value from a sum and finding the magnitude? (to replace
-the key[0] term) */
+value from a sum and finding the magnitude (to replace
+the key[0] term)? */
 
 /* TODO: replace all usages of hash2 with rehash */
+
+/* NOTE: 0 is reserved as an error or failure code
+because unsigned integers are used as return values. 
+Using a signed integer system just to represent -1 
+wastes space/resources */
 
 /* Returns a hash table index based on the
 key given. Used for initial hashing. Uses
 Bob Jenkins's one-at-a-time hash, found here: 
 
-en.wikipedia.org/wiki/Jenkins_hash_function
-
-NOTE: the traditional implementation is modified
-to ensure that no key hashes to 0, as 0
-is used for special purposes--i.e., 
-an indicator of a process failure. */
+en.wikipedia.org/wiki/Jenkins_hash_function */
 SIZEINT hash1(char* key, SIZEINT tablesize) {
     KEYLENINT length;
     KEYLENINT i = 0;
@@ -65,29 +65,18 @@ SIZEINT hash2(char* key) {
     return (40009 - (strlen(key) * key[0]) % 40009);
 }
 
-/* Calculates probing step sizes for double hashing. */
-SIZEINT rehash(SIZEINT oldhash, char* key, SIZEINT tablesize) {
-    SIZEINT newhash;
-    
-    newhash = (oldhash + hash2(key));
-
-    if(newhash == 0)
-        return newhash + 1;
-}
-
 
 /* Makes an empty dynamically-allocated hash table 
 with a size of the next prime number above the 
 requested size. Returns NULL if the requested size 
-is too large and leads to an integer overflow OR
-if the inputted value is less than two. */
+is too large OR if the inputted size is 0. */
 HashTable* htcreate(SIZEINT reqsize) {
     HashTable *ht = NULL;
     SIZEINT truesize;
 
     truesize = nextprime(reqsize);
 
-    if(!truesize || reqsize == 0)
+    if(truesize < 0 || reqsize == 0)
         /* If nextprime returned 0 (meaning that
         the prime number requested is too large
         for a SIZEINT integer), return NULL to 
@@ -107,11 +96,15 @@ HashTable* htcreate(SIZEINT reqsize) {
 /* Places a value into the hash table. Returns 1 on success 
 and 0 otherwise. */
 uint8_t htinsert(HashTable *ht, char* key, void* value) {
-    SIZEINT index, rehashstep, duplicateindex;
+    SIZEINT index, rehashstep;
 
-    /* Case in which the same key was entered again */
-    if(duplicateindex = htcontains(ht, key)) {
-        ht->values[duplicateindex] = value;
+
+    index = htcontains(ht, key);
+    /* Case in which the same key was entered again; 
+    simply overwrites the value belonging to the key
+    with the new value. */
+    if(index > 0) {
+        ht->values[index] = value;
         return 1;
     }
 
@@ -124,10 +117,7 @@ uint8_t htinsert(HashTable *ht, char* key, void* value) {
             return 0;
     
     index = hash1(key, ht->size);
-    
-    /* hash2 is only called if necessary. A Boolean expression
-    checking if hash2 needs to be run is more efficient 
-    than running hash2 once unnecessarily. */
+    /* This wrapping if condition prevents running hash2 unnecessarily */
     if(ht->keys[index] != NULL) {
         rehashstep = hash2(key);
 
@@ -135,11 +125,6 @@ uint8_t htinsert(HashTable *ht, char* key, void* value) {
             /* A free space in the table is guaranteed;
             the load factor was constrained to be less than CRITLF,
             which must be less than 1. */
-
-            /* TODO: Is this if statement necessary? */
-            if(index == 0)
-                continue;
-
             index = (index + rehashstep) % ht->size;
         }
     }
@@ -153,26 +138,33 @@ uint8_t htinsert(HashTable *ht, char* key, void* value) {
 
 /* Searches the table for an entry with the given 
 key. Returns the index of the key if found or 
-returns 0. */
+returns -1. */
 SIZEINT htcontains(HashTable *ht, char* key) {
     SIZEINT attempt, rehashstep, initialattempt;
     
     attempt = hash1(key, ht->size);
-    
+
+    /* If the key is at the first index attempt, immediately return that index.
+    The Boolean condition is prepended by a null check */
     if(ht->keys[attempt] != NULL && !strcmp(ht->keys[attempt], key))
         return attempt;
 
+    /* Record the initial attempt and probe until the key is
+    found or the initial attempt is reencountered */
     initialattempt = attempt;
     rehashstep = hash2(key);
-    
     while(1) {
         attempt = (attempt + rehashstep) % ht->size;
 
+        /* Case in which the key is found (with the Boolean
+        condition prepended by a null check). */
         if(ht->keys[attempt] != NULL && !strcmp(ht->keys[attempt], key))
             return attempt;
-
+        
+        /* Case in which every hash table value was visited and 
+        probing returned to the initial-attempt index */
         if(attempt == initialattempt)
-            return 0;
+            return -1;
     }
 }
 
@@ -182,8 +174,9 @@ key could not be found.*/
 void* htget(HashTable *ht, char* key) {
     SIZEINT index;
 
-    index = htcontains(ht, key);
-    if(!index)
+    /* If the hash table does not contain the inputted 
+    key, return NULL. */
+    if((index = htcontains(ht, key)) < 0)
         return NULL;
 
     return ht->values[index];
@@ -191,14 +184,13 @@ void* htget(HashTable *ht, char* key) {
 
 /* Removes the entry with the given key. Returns the pointer
 stored in the table with that key on success (to allow for
-quick deallocation by the user) and 0 otherwise. */
+quick deallocation by the user) and NULL otherwise. */
 void* htremove(HashTable *ht, char* key) {
     SIZEINT index;
     void* ptr;
 
-    index = htcontains(ht, key);
-    if(index == 0)
-        return 0;
+    if((index = htcontains(ht, key)) < 0)
+        return NULL;
     
     ptr = ht->values[index];
     ht->keys[index] = 0;
@@ -227,22 +219,22 @@ uint8_t htgrow(HashTable *ht) {
     oldkeys = ht->keys;
     oldvalues = ht->values;
 
-    newsize = nextprime((ht->size)*GF + 1);
-    if(!newsize) 
-        /* If nextprime returned 0 (meaning that
+    newsize = nextprime((SIZEINT)((ht->size)*GF + 1));
+    /* If nextprime returned -1 (meaning that
         the prime number requested is too large
         for a a SIZEINT integer), return 0 to indicate 
         failure. */
+    if(newsize < 0) 
         return 0;
 
     ht->keys = (char**)malloc(sizeof(char*) * newsize);
     ht->values = (void**)malloc(sizeof(void*) * newsize);
 
-    if(ht->keys == NULL || ht->values == NULL) {
-        /* If malloc could not find free space (meaning 
+    /* If malloc could not find free space (meaning 
         it returned NULL) for either the keys or the 
         values, abort the creation of new key and value 
         arrays and return 0 to indicate failure.*/
+    if(ht->keys == NULL || ht->values == NULL) {
         ht->keys = oldkeys;
         ht->values = oldvalues;
         return 0;
@@ -267,15 +259,12 @@ uint8_t htgrow(HashTable *ht) {
 testing, etc. that prints a string representation
 of the hash table to the terminal. */
 void htprint(HashTable *ht) {
-
     printf("Entries: %d\n", ht->entries);
     printf("Size: %d\n", ht->size);
     printf("Load factor: %f\n", (float)(ht->entries) / ht->size);
 
     for(int i = 0; i < ht->size; i++) {
-        if(i == 0)
-            printf("Reserved spot (index 0)\n");
-        else if(ht->keys[i] != NULL)
+        if(ht->keys[i] != NULL)
             printf("%s: %d\n", ht->keys[i], *((int*)ht->values[i]));
         else 
             printf("Empty spot\n");
@@ -283,7 +272,7 @@ void htprint(HashTable *ht) {
 }
 
 /* Finds the next prime number above the 
-given number. Returns 0 if the prime number 
+given number. Returns -1 if the prime number 
 requested leads to an overflow.
 
 geeksforgeeks.org/program-to-find-the-next-prime-number/ */
@@ -293,7 +282,7 @@ SIZEINT nextprime(SIZEINT n) {
         /* If n is greater than the largest prime number
         representable by a SIZEINT, return 0 to indicate
         an overflow issue. */
-        return 0;
+        return -1;
     
     while(1) {
         if(isprime(n))

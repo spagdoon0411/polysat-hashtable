@@ -4,15 +4,14 @@
 #include <string.h>  
 
 /* The type of integer used for the table size. 
-Should be unsigned. Determines how large the 
+Should be signed. Determines how large the 
 hash table can grow. */
-#define SIZEINT uint32_t 
+#define SIZEINT int32_t 
 
-/* The prime number just below or equal to the 
-maximum value that can be held by a SIZEINT 
-integer. In other words, the largest prime
-number that can be held by a SIZEINT. */
-#define MAXPRIME (SIZEINT)4294967291 
+/* The largest prime number that can be held 
+by a SIZEINT. Used within nextprime() to check for
+integer overflow. */
+#define MAXPRIME (SIZEINT)2147483647 
 
 /* Load factor threshold for table expansion, 
 always less than 1. 0.75 is used here, as that

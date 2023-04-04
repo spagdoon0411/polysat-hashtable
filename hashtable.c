@@ -6,9 +6,6 @@
 /* Limit key strings to a certain length? Would guarantee speed
 and avoid the integer overflow issue. */
 
-/* TODO: make sure index 0 does not contribute to the table
-size. */
-
 /* TODO: use negatives for error codes? Or is it better
 not to use negatives, as they create the risk of the user
 accidentally indexing out of bounds? Does the user 
@@ -23,6 +20,11 @@ exceptions) */
 characters. Maybe alternate adding and subtracting each ASCII
 value from a sum and finding the magnitude? (to replace
 the key[0] term) */
+
+/* TODO: make a neat hash function dependent on hash1 and hash2
+that prevents any hashing to 0. This is when the size should be 
+updated to avoid using 0. Alternatively, use -1 for error codes
+instead of 0 and allow hashing to 0. */
 
 
 /* Returns a hash table index based on the

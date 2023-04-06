@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <stdio.h>
 #include "hashtable.h"
 
 /* Tests whether empty hash tables are 

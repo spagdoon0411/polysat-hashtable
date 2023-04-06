@@ -91,7 +91,6 @@ HashTable *htcreate(SIZEINT reqsize) {
     ht->keys = (char**)calloc(truesize, sizeof(char*));
     ht->values = (void**)malloc(sizeof(void*) * truesize);
     ht->entries = 0;
-    ht->values[0] = NULL;
 
     return ht;
 }

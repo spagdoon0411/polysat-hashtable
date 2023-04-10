@@ -24,6 +24,15 @@ by a SIZEINT. Used within nextprime() to check for
 integer overflow. */
 #define MAXPRIME (SIZEINT)2147483647
 
+/* The type of integer used to represent the
+lengths of keys. Should allow for at least
+MAXPRIME unique keys. */
+#define KEYLENINT uint8_t
+
+/* Integer size used in the Jenkins hash function.
+32 by default. Must be unsigned. */
+#define OAATJENINT uint32_t
+
 typedef struct HashTable {
     SIZEINT entries; 
     SIZEINT size;

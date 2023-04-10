@@ -1,14 +1,5 @@
 #include "hashtable.h"
 
-/* The type of integer used to represent the
-lengths of keys. Should allow for at least
-MAXPRIME unique keys. */
-#define KEYLENINT uint8_t
-
-/* Integer size used in the Jenkins hash function.
-32 by default. Must be unsigned. */
-#define OAATJENINT uint32_t
-
 /* MAKE SURE TO VALIDATE KEYS--NO EMPTY STRINGS */
 
 /* TODO: for hash2, see if there's a way to involve all
@@ -288,7 +279,7 @@ SIZEINT nextprime(SIZEINT n) {
 
     if (n > MAXPRIME) 
         /* If n is greater than the largest prime number
-        representable by a SIZEINT, return 0 to indicate
+        representable by a SIZEINT, return -1 to indicate
         an overflow issue. */
         return -1;
     

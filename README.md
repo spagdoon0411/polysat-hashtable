@@ -1,20 +1,5 @@
 # polysat-hashtable
 
-## Goals and Notes
-- As encapsulated/modular as possible 
-    - Separate functions for: 
-        - Rehashing
-        - Hash code generation (arguments would *include* the key and table size)
-        - Insertion 
-- Wrapper struct: 
-    - Number of entries
-    - Hash table size
-    - Key and value array pointers (char** and void**, respectively)
-- For growth factors, [1.5 seems to be more optimal than 2](https://stackoverflow.com/questions/2369467/why-are-hash-table-expansions-usually-done-by-doubling-the-size). It would be a good idea to understand and be able to present on why this is the case. 
-
-## Questions/To Consider
-- A comment on this thread mentions a method for [lazy rehashing](https://stackoverflow.com/questions/9858751/how-to-implement-a-dynamic-size-hash-table)
-
 ## Task Description
 This question would be good for those who are confident in their systems
 programming.
